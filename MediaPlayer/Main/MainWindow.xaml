@@ -1,0 +1,108 @@
+﻿<Window x:Class="MediaPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:UI="clr-namespace:MediaPlayer.UI"
+        mc:Ignorable="d" xmlns:fa="http://schemas.fontawesome.com/icons/"
+        Title="Media Player" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ListView Name="lvLibraryItems" Grid.Row="0" ItemsSource="{Binding LibraryItems}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Your Library" Width="190" DisplayMemberBinding="{Binding Name}" />
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="lvLibraryItemsItem_PreviewMouseLeftButtonDown" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+
+            <ListView Name="lvPlaylists" Grid.Row="1">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Playlists" Width="190" DisplayMemberBinding="{Binding Name}" />
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="lvPlaylistsItem_PreviewMouseLeftButtonDown" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnAddPlaylist" Grid.Column="0" Grid.Row="1" Width="30" Height="30" Background="Transparent" BorderBrush="Transparent" Click="btnAddPlaylist_Click">
+                <fa:SvgAwesome Icon="Solid_PlusCircle" Foreground="Black"/>
+            </Button>
+            <Label Grid.Column="1" x:Name="lblAddPlaylist">Add new Playlist</Label>
+            <TextBox Grid.Column="1" x:Name="txtPlaylistName" Visibility="Hidden" LostFocus="txtPlaylistName_LostFocus" KeyDown="txtPlaylistName_OnKeyDown"/>
+        </Grid>
+        
+        <UI:PageFrame x:Name="pageFrame" Grid.Row="0" Grid.Column="1" Content="{Binding CurrentPage}" Pages="{Binding Pages}"/>
+        <MediaElement x:Name="mePlayer" Grid.Row="0" Grid.Column="1" LoadedBehavior="Manual" Visibility="Hidden" MediaEnded="mePlayer_OnMediaEnded" MediaOpened="Element_MediaOpened"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <Label Name="lblTimer" Width="80" Content="00:00/00:00"/>
+            <Slider Name="timelineSlider" Margin="5" Width="500" Minimum="0" Maximum="1" Thumb.DragStarted="timelineSlider_DragStarted" Thumb.DragCompleted="timelineSlider_DragFinished"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Grid.Column="0">
+            <Label x:Name="lblCurrentSong" FontSize="15" FontWeight="Black"></Label>
+            <Label x:Name="lblCurrentArtists" FontSize="12"></Label>
+        </StackPanel>
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnPrevious" Grid.Column="1" Height="40" Width="50" BorderBrush="Transparent" Background="Transparent" Click="btnPrevious_Click">
+                <fa:SvgAwesome  Icon="Solid_StepBackward" Height="30" />
+            </Button>
+            <Button x:Name="btnStop" Grid.Column="2" Height="40" Width="50" BorderBrush="Transparent" Background="Transparent" Click="btnStop_Click">
+                <fa:SvgAwesome x:Name="faStop" Icon="Solid_Stop" Height="30" />
+            </Button>
+            <Button x:Name="btnPlayPause" Grid.Column="3" Height="40" Width="50" BorderBrush="Transparent" Background="Transparent" Click="btnPlayPause_Click">
+                <fa:SvgAwesome x:Name="faPlayPause" Icon="Solid_Play" Height="30" />
+            </Button>
+            <Button x:Name="btnNext" Grid.Column="4" Height="40" Width="50" BorderBrush="Transparent" Background="Transparent" Click="btnNext_Click">
+                <fa:SvgAwesome Icon="Solid_StepForward" Height="30"/>
+            </Button>
+            <Button x:Name="btnShuffle" Grid.Column="5" Height="40" Width="50" BorderBrush="Transparent" Background="Transparent" Click="btnShuffle_Click">
+                <fa:SvgAwesome x:Name="faShuffle" Icon="Solid_Random" Height="30" Foreground="Red"/>
+            </Button>
+            <fa:SvgAwesome Grid.Column="6" Height="20" Width="20" Icon="Solid_VolumeUp" />
+            <Slider Name="volumeSlider" Grid.Column="7" HorizontalAlignment="Left" VerticalAlignment="Center" ValueChanged="ChangeMediaVolume" Minimum="0" Maximum="1" Value="0.5" Width="100"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,38 @@
+﻿<Window x:Class="MediaPlayer.UI.AddSongs"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MediaPlayer.UI"
+        mc:Ignorable="d"
+        Title="AddSongs" Height="300" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <ListView Name="lvSongs" Grid.Row="0" local:GridViewSort.AutoSort="True">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn  Width="30">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="chkSingleSong" Checked="chkSingleSong_StateChanged"></CheckBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Title" Width="150" DisplayMemberBinding="{Binding Name}" local:GridViewSort.PropertyName="Name"/>
+                    <GridViewColumn Header="Artist" Width="150" DisplayMemberBinding="{Binding Artists}" local:GridViewSort.PropertyName="Artists"/>
+                    <GridViewColumn Header="Album" Width="150" DisplayMemberBinding="{Binding Album}" local:GridViewSort.PropertyName="Album"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button x:Name="btnCancel" Content="Cancel" Height="30" Width="50" Margin="0,0,5,0" Click="btnCancel_OnClick"/>
+            <Button x:Name="btnAddAllSongs" Content="Add All" Height="30" Width="80" Margin="0,0,5,0" Click="btnAddAllSongs_OnClick"/>
+            <Button x:Name="btnAdd" Content="Add Selected" Height="30" Width="80" Margin="0,0,5,0" Click="btnAdd_OnClick"/>
+        </StackPanel>
+    </Grid>
+</Window>
