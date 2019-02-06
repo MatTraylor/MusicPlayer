@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Media;
 using MediaPlayer.Media;
+using System.Diagnostics;
 
 namespace MediaPlayer
 {
@@ -13,31 +14,29 @@ namespace MediaPlayer
         public string Name { get; private set; }
         public string Artists { get; private set; }
         public string Album { get; private set; }
-        public TimeSpan Duration { get; private set; }
         public string Filename { get; private set; }
 
         public int ID { get; set; }
 
-        public Song(string filename, int id)
-        {
-            ID = id;
-            SetValues(filename);
-        }
-
         public Song(string filename)
-        {
-            SetValues(filename);
-        }
-
-        private void SetValues(string filename)
         {
             Filename = filename;
             TagLib.File fileMetaData = TagLib.File.Create(filename);
-            Name = fileMetaData.Tag.Title;
-            string artits = String.Join(", ", fileMetaData.Tag.Performers);
-            Artists = String.IsNullOrEmpty(artits) ? "Unkown Artists" : artits;
-            Album = String.IsNullOrEmpty(fileMetaData.Tag.Album) ? "Unknown Album" : fileMetaData.Tag.Album;
-            Duration = fileMetaData.Properties.Duration;
+            try
+            {
+                Name = fileMetaData.Tag.Title;
+                string artits = String.Join(", ", fileMetaData.Tag.Performers);
+                Artists = String.IsNullOrEmpty(artits) ? "Unkown Artists" : artits;
+                Album = String.IsNullOrEmpty(fileMetaData.Tag.Album) ? "Unknown Album" : fileMetaData.Tag.Album;
+            }
+            catch (Exception)
+            {
+                using (EventLog eventLog = new EventLog("Application"))
+                {
+                    eventLog.Source = "Application";
+                    eventLog.WriteEntry($"Failed to gather meta data information information on file '{filename}'", EventLogEntryType.Warning);
+                }
+            }
 
             if (String.IsNullOrEmpty(Name)) Name = filename.Contains("\\") ? filename.Substring(filename.LastIndexOf("\\") + 1) : filename;
         }

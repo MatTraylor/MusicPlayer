@@ -21,7 +21,7 @@
         <ListView Name="lvMetaDataItem" Grid.Row="1" local:GridViewSort.AutoSort="True">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Artist" Width="180" DisplayMemberBinding="{Binding Name}" local:GridViewSort.PropertyName="Name"/>
+                    <GridViewColumn x:Name="clmObjectName" Header="Artist" Width="180" DisplayMemberBinding="{Binding Name}" local:GridViewSort.PropertyName="Name"/>
                     <GridViewColumn Header="Songs" Width="180" DisplayMemberBinding="{Binding Count}" local:GridViewSort.PropertyName="Count"/>
                 </GridView>
             </ListView.View>

@@ -15,12 +15,9 @@ using System.Windows.Shapes;
 
 namespace MediaPlayer.UI
 {
-    /// <summary>
-    /// Interaction logic for AddSongs.xaml
-    /// </summary>
     public partial class AddSongs : Window
     {
-        private List<Song> songsToAdd = new List<Song>();
+        private List<Song> mySongsToAdd = new List<Song>();
         private Playlist myPlaylist;
 
         public AddSongs(Playlist playlist)
@@ -36,33 +33,27 @@ namespace MediaPlayer.UI
             CheckBox chkBox = (CheckBox)sender;
             if ((bool)chkBox.IsChecked)
             {
-                songsToAdd.Add((Song)chkBox.DataContext);
+                mySongsToAdd.Add((Song)chkBox.DataContext);
             }
             else
             {
-                songsToAdd.Remove((Song)chkBox.DataContext);
+                mySongsToAdd.Remove((Song)chkBox.DataContext);
             }
         }
 
-        private void btnCancel_OnClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void btnCancel_OnClick(object sender, RoutedEventArgs e) =>Close();        
 
-        private void btnAdd_OnClick(object sender, RoutedEventArgs e)
-        {
-            AddSongsToPlaylist();
-        }
+        private void btnAdd_OnClick(object sender, RoutedEventArgs e) => AddSongsToPlaylist();        
 
         private void btnAddAllSongs_OnClick(object sender, RoutedEventArgs e)
         {
-            songsToAdd.AddRange((IEnumerable<Song>)lvSongs.ItemsSource);
+            mySongsToAdd.AddRange((IEnumerable<Song>)lvSongs.ItemsSource);
             AddSongsToPlaylist();
         }
 
         private void AddSongsToPlaylist()
         {
-            foreach (Song song in songsToAdd)
+            foreach (Song song in mySongsToAdd)
             {
                 myPlaylist.Songs.Add(song);
             }

@@ -7,42 +7,36 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.ComponentModel;
 using MediaPlayer.Media;
+using System.Windows.Forms;
 
 namespace MediaPlayer
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
-        private System.Windows.Forms.NotifyIcon myNotifyIcon;
-        private bool myIsExit;
+        private NotifyIcon myNotifyIcon;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             MainWindow = new MainWindow();
             MainWindow.Closing += MainWindow_Closing;
-            myNotifyIcon = new System.Windows.Forms.NotifyIcon();
+            myNotifyIcon = new NotifyIcon();
             myNotifyIcon.Click += (s, args) => ShowMainWindow();
             myNotifyIcon.Icon = MediaPlayer.Properties.Resources.MusicPlayer;
             myNotifyIcon.Visible = true;
 
-            CreateContextMenu();
-            ShowMainWindow();
-        }
+            myNotifyIcon.ContextMenuStrip = new ContextMenuStrip();
+            myNotifyIcon.ContextMenuStrip.Items.Add("MainWindow...").Click += (s, ev) => ShowMainWindow();
+            myNotifyIcon.ContextMenuStrip.Items.Add("Exit").Click += (s, ev) => ExitApplication();
 
-        private void CreateContextMenu()
-        {
-            myNotifyIcon.ContextMenuStrip =
-              new System.Windows.Forms.ContextMenuStrip();
-            myNotifyIcon.ContextMenuStrip.Items.Add("MainWindow...").Click += (s, e) => ShowMainWindow();
-            myNotifyIcon.ContextMenuStrip.Items.Add("Exit").Click += (s, e) => ExitApplication();
+            ShowMainWindow();
         }
 
         private void ExitApplication()
         {
-            myIsExit = true;
             MainWindow.Close();
             myNotifyIcon.Dispose();
             myNotifyIcon = null;
@@ -64,14 +58,6 @@ namespace MediaPlayer
             }
         }
 
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
-        {
-            if (!myIsExit)
-            {               
-                e.Cancel = true;
-                MainWindow.Hide();
-                MediaUtils.SavePlaylists();
-            }
-        }
+        private void MainWindow_Closing(object sender, CancelEventArgs e) => MediaUtils.SavePlaylists();        
     }
 }

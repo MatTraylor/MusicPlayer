@@ -22,56 +22,45 @@ namespace MediaPlayer.UI
 
         public static void SetAutoSort(DependencyObject obj, bool value) => obj.SetValue(AutoSortProperty, value);
 
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
-            "Command",
-            typeof(ICommand),
-            typeof(GridViewSort),
-            new UIPropertyMetadata(
-                null,
-                (o, e) =>
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(GridViewSort), 
+            new UIPropertyMetadata( null, (o, e) =>
+            {
+                if (o is ItemsControl listView)
                 {
-                    ItemsControl listView = o as ItemsControl;
-                    if (listView != null)
+                    if (!GetAutoSort(listView))
                     {
-                        if (!GetAutoSort(listView))
+                        if (e.OldValue != null && e.NewValue == null)
                         {
-                            if (e.OldValue != null && e.NewValue == null)
-                            {
-                                listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
-                            }
-                            if (e.OldValue == null && e.NewValue != null)
-                            {
-                                listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
-                            }
+                            listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                        }
+                        if (e.OldValue == null && e.NewValue != null)
+                        {
+                            listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                         }
                     }
-                }));
+                }
+            }));
 
-        public static readonly DependencyProperty AutoSortProperty = DependencyProperty.RegisterAttached(
-            "AutoSort",
-            typeof(bool),
-            typeof(GridViewSort),
-            new UIPropertyMetadata(
-                false,
-                (o, e) =>
+        public static readonly DependencyProperty AutoSortProperty = DependencyProperty.RegisterAttached("AutoSort", typeof(bool), typeof(GridViewSort),
+            new UIPropertyMetadata( false, (o, e) =>
+            {
+                if (o is ListView listView)
                 {
-                    if (o is ListView listView)
+                    if (GetCommand(listView) == null)
                     {
-                        if (GetCommand(listView) == null)
+                        bool oldValue = (bool)e.OldValue;
+                        bool newValue = (bool)e.NewValue;
+                        if (oldValue && !newValue)
                         {
-                            bool oldValue = (bool)e.OldValue;
-                            bool newValue = (bool)e.NewValue;
-                            if (oldValue && !newValue)
-                            {
-                                listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
-                            }
-                            if (!oldValue && newValue)
-                            {
-                                listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
-                            }
+                            listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                        }
+                        if (!oldValue && newValue)
+                        {
+                            listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                         }
                     }
-                }));
+                }
+            }));
 
         private static void ColumnHeader_Click(object sender, RoutedEventArgs e)
         {

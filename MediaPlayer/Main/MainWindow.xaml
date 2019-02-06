@@ -61,8 +61,14 @@
             <Label Grid.Column="1" x:Name="lblAddPlaylist">Add new Playlist</Label>
             <TextBox Grid.Column="1" x:Name="txtPlaylistName" Visibility="Hidden" LostFocus="txtPlaylistName_LostFocus" KeyDown="txtPlaylistName_OnKeyDown"/>
         </Grid>
+
+        <StackPanel Grid.Row="2" Grid.Column="0">
+            <Label x:Name="lblCurrentSong" FontSize="15" FontWeight="Black"></Label>
+            <Label x:Name="lblCurrentArtists" FontSize="12"></Label>
+        </StackPanel>
+
+        <UI:PageFrame x:Name="pageFrame" Grid.Row="0" Grid.Column="1"/>        
         
-        <UI:PageFrame x:Name="pageFrame" Grid.Row="0" Grid.Column="1" Content="{Binding CurrentPage}" Pages="{Binding Pages}"/>
         <MediaElement x:Name="mePlayer" Grid.Row="0" Grid.Column="1" LoadedBehavior="Manual" Visibility="Hidden" MediaEnded="mePlayer_OnMediaEnded" MediaOpened="Element_MediaOpened"/>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
@@ -70,11 +76,6 @@
             <Slider Name="timelineSlider" Margin="5" Width="500" Minimum="0" Maximum="1" Thumb.DragStarted="timelineSlider_DragStarted" Thumb.DragCompleted="timelineSlider_DragFinished"/>
         </StackPanel>
         
-        <StackPanel Grid.Row="2" Grid.Column="0">
-            <Label x:Name="lblCurrentSong" FontSize="15" FontWeight="Black"></Label>
-            <Label x:Name="lblCurrentArtists" FontSize="12"></Label>
-        </StackPanel>
-
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

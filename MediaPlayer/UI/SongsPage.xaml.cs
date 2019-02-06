@@ -23,27 +23,30 @@ namespace MediaPlayer.UI
     public partial class SongsPage : Page
     {
         private Playlist myPlaylist;
+        private ObservableCollection<Song> mySongs;
 
         public SongsPage(ObservableCollection<Song> mediaList, string pageTitle = "Songs")
         {
             InitializeComponent();
             lblSongPageTitle.Content = pageTitle;
-            ucSongsList.lvSongs.ItemsSource = mediaList;
+            ucSongsList.lvSongs.ItemsSource = mySongs = mediaList;
         }
 
         public SongsPage(Playlist playlist = null)
         {
             InitializeComponent();
             lblSongPageTitle.Content = playlist.Name;
-            ucSongsList.lvSongs.ItemsSource = playlist.Songs;
+            ucSongsList.lvSongs.ItemsSource = mySongs = playlist.Songs;
             btnAddSongs.Visibility = Visibility.Visible;
-            myPlaylist = playlist;            
+            myPlaylist = playlist;
         }
 
         private void txtSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            IEnumerable<Song> songs = (IEnumerable<Song>)ucSongsList.lvSongs.ItemsSource;
-            ucSongsList.lvSongs.ItemsSource = songs.Where(x => x.Name.Contains(((TextBox)sender).Text, StringComparison.InvariantCultureIgnoreCase));
+            string textboxText = ((TextBox)sender).Text;
+            ucSongsList.lvSongs.ItemsSource = mySongs.Where(x => x.Name.Contains(textboxText, StringComparison.InvariantCultureIgnoreCase)
+            || x.Artists.Contains(textboxText, StringComparison.InvariantCultureIgnoreCase)
+            || x.Album.Contains(textboxText, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private void btnAddSongs_Click(object sender, RoutedEventArgs e)

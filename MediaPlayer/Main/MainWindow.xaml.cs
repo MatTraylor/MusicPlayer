@@ -160,11 +160,8 @@ namespace MediaPlayer
 
         private void CheckUserInput(object sender, EventArgs e)
         {
-            TimeSpan spent = TimeSpan.FromMilliseconds(IdleTimeFinder.GetIdleTime());
-            if (spent.TotalSeconds > 30)
-            {
-                Close();
-            }
+            TimeSpan ts = TimeSpan.FromMilliseconds(IdleTimeFinder.GetIdleTime());
+            if (ts.TotalSeconds > 30) Hide();            
         }
 
         private void ChangeMediaVolume(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -188,7 +185,7 @@ namespace MediaPlayer
         {
             if (myTotalTime.TotalSeconds > 0)
             {
-                lblTimer.Content = $"{string.Format("{0:00}:{1:00}", MediaUtils.MediaElement.Position.Minutes, MediaUtils.MediaElement.Position.Seconds)}/{string.Format("{0:00}:{1:00}", myTotalTime.Minutes, myTotalTime.Seconds)}";
+                lblTimer.Content = $"{String.Format("{0:00}:{1:00}", MediaUtils.MediaElement.Position.Minutes, MediaUtils.MediaElement.Position.Seconds)}/{String.Format("{0:00}:{1:00}", myTotalTime.Minutes, myTotalTime.Seconds)}";
                 if (mySetSliderValue) timelineSlider.Value = MediaUtils.MediaElement.Position.TotalSeconds;
             }            
         }
@@ -200,10 +197,7 @@ namespace MediaPlayer
             mySetSliderValue = true;
         }
 
-        private void timelineSlider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
-        {
-            mySetSliderValue = false;
-        }
+        private void timelineSlider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) => mySetSliderValue = false;        
     }
 
     public class LibraryItem

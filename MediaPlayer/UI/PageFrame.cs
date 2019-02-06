@@ -14,14 +14,6 @@ namespace MediaPlayer.UI
     {
         public MainWindow CurrentMainWindow => (MainWindow)Window.GetWindow(this);
 
-        public ObservableCollection<Page> Pages
-        {
-            get => (ObservableCollection<Page>)GetValue(PagesProperty);
-            set => SetValue(PagesProperty, value);
-        }
-
-        public static readonly DependencyProperty PagesProperty = DependencyProperty.Register("Pages", typeof(ObservableCollection<Page>), typeof(PageFrame));
-
         private Page myCurrentPage;
         public Page CurrentPage
         {

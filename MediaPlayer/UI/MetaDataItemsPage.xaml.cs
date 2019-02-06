@@ -23,18 +23,20 @@ namespace MediaPlayer.UI
     /// </summary>
     public partial class MetaDataItemsPage : Page
     {
-        public MetaDataItemsPage(ObservableCollection<Artist> mediaList)
+        private IEnumerable<MetaDataItem> myMetaDataItems;
+
+        public MetaDataItemsPage(ObservableCollection<Artist> metaDataItems)
         {
             InitializeComponent();
-            lvMetaDataItem.ItemsSource = mediaList;
-            lblPageTitle.Content = "Artists";
+            lvMetaDataItem.ItemsSource = myMetaDataItems = metaDataItems;
+            lblPageTitle.Content = clmObjectName.Header = "Artists";
         }
 
-        public MetaDataItemsPage(ObservableCollection<Album> mediaList)
+        public MetaDataItemsPage(ObservableCollection<Album> metaDataItems)
         {
             InitializeComponent();
-            lvMetaDataItem.ItemsSource = mediaList;
-            lblPageTitle.Content = "Albums";
+            lvMetaDataItem.ItemsSource = myMetaDataItems = metaDataItems;
+            lblPageTitle.Content = clmObjectName.Header = "Albums";
         }
 
         private void lvPlaylistsItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -49,10 +51,6 @@ namespace MediaPlayer.UI
             MediaUtils.SongsCurrentlySelected = songs;
         }
 
-        private void txtSearchBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            IEnumerable<MetaDataItem> metaDataItems = (IEnumerable<MetaDataItem>)lvMetaDataItem.ItemsSource;
-            lvMetaDataItem.ItemsSource = metaDataItems.Where(x => x.Name.Contains(((TextBox)sender).Text, StringComparison.InvariantCultureIgnoreCase));
-        }
+        private void txtSearchBox_TextChanged(object sender, TextChangedEventArgs e) => lvMetaDataItem.ItemsSource = myMetaDataItems.Where(x => x.Name.Contains(((TextBox)sender).Text, StringComparison.InvariantCultureIgnoreCase));       
     }
 }

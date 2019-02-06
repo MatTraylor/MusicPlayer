@@ -149,18 +149,5 @@ namespace MediaPlayer.Media
                 }
             }
         }
-
-        public static void CreateTimer()
-        {
-            Timer timer = new Timer((e) => CheckUserInput(), null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
-        }
-        private static void CheckUserInput()
-        {
-            TimeSpan spent = TimeSpan.FromMilliseconds(IdleTimeFinder.GetIdleTime());
-            if (spent.TotalSeconds > 30)
-            {
-                MainWindow.Current.Close();
-            }
-        }
     }
 }
